@@ -15,7 +15,7 @@ def balance_combustion(formula):
         return "Fórmula inválida. Use formato como 'C2H6'"
     
     # Definir coeficientes
-    a, b, c, d = symbols('a b c d', integer=True)
+    a, b, c, d = symbols('a b c d', integer=True, positive=True)
     
     # Ecuaciones de balance
     eq1 = Eq(nC * a, c)  # Carbono
@@ -27,11 +27,19 @@ def balance_combustion(formula):
     
     if solution:
         sol = solution[0]
-        return f"{sol[a]} {formula} + {sol[b]} O2 -> {sol[c]} CO2 + {sol[d]} H2O"
+        coef_a, coef_b, coef_c, coef_d = sol[a], sol[b], sol[c], sol[d]
+        equation = f"{coef_a} {formula} + {coef_b} O₂ → {coef_c} CO₂ + {coef_d} H₂O"
+        return equation
     else:
         return "No se pudo balancear la ecuación."
 
-# Ejemplo de uso
+def main():
+    print("Balanceador de ecuaciones de combustión de hidrocarburos")
+    while True:
+        hidrocarburo = input("Ingrese la fórmula del hidrocarburo (ej. C2H6, 'salir' para terminar): ")
+        if hidrocarburo.lower() == 'salir':
+            break
+        print(balance_combustion(hidrocarburo))
+
 if __name__ == "__main__":
-    hidrocarburo = input("Ingrese la fórmula del hidrocarburo (ej. C2H6): ")
-    print(balance_combustion(hidrocarburo))
+    main()
